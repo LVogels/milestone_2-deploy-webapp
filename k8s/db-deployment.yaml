@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lv-ms2-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lv-ms2-db
+  template:
+    metadata:
+      labels:
+        app: lv-ms2-db
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:11
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "milestone2"
+        - name: MYSQL_DATABASE
+          value: "milestone2"
+        - name: MYSQL_TCP_PORT
+          value: "3306"
+        volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/mysql
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
+        livenessProbe:
+          exec:
+            command: 
+            - /bin/sh
+            - -c
+            - "mariadb-admin ping -uroot -pmilestone2"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "mariadb-admin ping -uroot -pmilestone2"
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 5
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data-pvc
+      - name: init-script
+        configMap:
+          name: db-init-script
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lv-ms2-db-service
+spec:
+  selector:
+    app: lv-ms2-db
+  ports:
+  - name: mysql
+    port: 3306
+    targetPort: 3306

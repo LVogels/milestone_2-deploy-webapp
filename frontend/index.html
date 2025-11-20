@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milestone 2</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1><span id="user">Loading...</span> has reached milestone 2!</h1>
+      <div class="info-box">
+        <strong>Container ID:</strong> <span id="container_id">Loading...</span>
+      </div>
+      <div class="info-box">
+        <strong>Last Updated:</strong> <span id="timestamp">-</span>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = '/api';
+      
+      // Function to fetch and update data
+      async function updateData() {
+        try {
+          // Fetch user data
+          const userResponse = await fetch(`${API_BASE}/user`);
+          const userData = await userResponse.json();
+          document.getElementById('user').innerText = userData.name;
+          
+          // Fetch container ID
+          const containerResponse = await fetch(`${API_BASE}/container_id`);
+          const containerData = await containerResponse.json();
+          document.getElementById('container_id').innerText = containerData.container_id;
+          
+          // Update timestamp
+          document.getElementById('timestamp').innerText = new Date().toLocaleString();
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+      
+      // Initial load
+      updateData();
+      
+      // Refresh data every 10 seconds
+      setInterval(updateData, 10000);
+    </script>
+  </body>
+</html>

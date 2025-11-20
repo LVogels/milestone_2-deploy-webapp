@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: lv-ms2-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - ms2-network
+    restart: unless-stopped
+
+  api:
+    build: ./api
+    container_name: lv-ms2-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=milestone2
+      - DB_NAME=milestone2
+      - DB_PORT=3306
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ms2-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  db:
+    image: mariadb:11
+    container_name: lv-ms2-db
+    environment:
+      MYSQL_ROOT_PASSWORD: milestone2
+      MYSQL_DATABASE: milestone2
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - ms2-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1", "-uroot", "-pmilestone2"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+
+networks:
+  ms2-network:
+    driver: bridge
+
+volumes:
+  db_data:

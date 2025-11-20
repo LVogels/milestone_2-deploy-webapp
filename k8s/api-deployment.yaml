@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lv-ms2-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lv-ms2-api
+  template:
+    metadata:
+      labels:
+        app: lv-ms2-api
+    spec:
+      containers:
+      - name: api
+        image: lv-ms2-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_HOST
+          value: "lv-ms2-db-service"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "milestone2"
+        - name: DB_NAME
+          value: "milestone2"
+        - name: DB_PORT
+          value: "3306"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lv-ms2-api-service
+spec:
+  selector:
+    app: lv-ms2-api
+  ports:
+  - port: 8000
+    targetPort: 8000
