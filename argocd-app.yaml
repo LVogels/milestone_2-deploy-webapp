@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: milestone2-app
+  namespace: argocd # ArgoCD applications are typically managed in the argocd namespace
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/LVogels/milestone_2-deploy-webapp.git
+    targetRevision: HEAD # Or a specific branch like 'main' or 'master'
+    path: k8s # The path within the repository where your Kubernetes manifests are located
+  destination:
+    server: https://kubernetes.default.svc # This refers to the in-cluster Kubernetes API server
+    namespace: default # The namespace where the application should be deployed
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true # Automatically create the target namespace if it doesn't exist
