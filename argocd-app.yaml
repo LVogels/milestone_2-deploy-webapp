@@ -11,7 +11,7 @@ spec:
     path: k8s # The path within the repository where your Kubernetes manifests are located
   destination:
     server: https://kubernetes.default.svc # This refers to the in-cluster Kubernetes API server
-    namespace: default # The namespace where the application should be deployed
+    namespace: ms2
   syncPolicy:
     automated:
       prune: true
