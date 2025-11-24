@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 import mysql.connector
 import os
@@ -95,8 +95,9 @@ async def get_user():
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 @app.get("/container_id")
-async def get_container_id():
+async def get_container_id(response: Response):
     """Get container ID (hostname)"""
+    response.headers["Connection"] = "close"
     return {"container_id": socket.gethostname()}
 
 @app.put("/user/{name}")
