@@ -7,6 +7,7 @@ RUN apk add --no-cache lighttpd curl
 COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 # Copy web content
+
 COPY index.html /var/www/localhost/htdocs/
 
 # Create a simple health check
