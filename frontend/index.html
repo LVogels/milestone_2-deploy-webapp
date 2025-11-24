@@ -29,7 +29,7 @@
           document.getElementById('user').innerText = userData.name;
           
           // Fetch container ID
-          const containerResponse = await fetch(`${API_BASE}/container_id`);
+          const containerResponse = await fetch(`${API_BASE}/container_id?_=${Date.now()}`);
           const containerData = await containerResponse.json();
           document.getElementById('container_id').innerText = containerData.container_id;
           
