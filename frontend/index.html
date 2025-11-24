@@ -18,16 +18,33 @@
     </div>
 
     <script>
-              fetch("/api/name")
-          .then(r => r.json())
-          .then(d => document.getElementById("user").innerText = d.name)
-          .catch(() => document.getElementById("user").innerText = "error");
-
-        // fetch container ID (pod name)
-        fetch("/api/container-id")
-          .then(r => r.json())
-          .then(d => document.getElementById("cid").innerText = d.container_id)
-          .catch(() => document.getElementById("cid").innerText = "error");
+      const API_BASE = 'http://localhost/api';
+      
+      // Function to fetch and update data
+      async function updateData() {
+        try {
+          // Fetch user data
+          const userResponse = await fetch(`${API_BASE}/user`);
+          const userData = await userResponse.json();
+          document.getElementById('user').innerText = userData.name;
+          
+          // Fetch container ID
+          const containerResponse = await fetch(`${API_BASE}/container_id?_=${Date.now()}`);
+          const containerData = await containerResponse.json();
+          document.getElementById('container_id').innerText = containerData.container_id;
+          
+          // Update timestamp
+          document.getElementById('timestamp').innerText = new Date().toLocaleString();
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+      
+      // Initial load
+      updateData();
+      
+      // Refresh data every 10 seconds
+      setInterval(updateData, 10000);
     </script>
   </body>
 </html>
