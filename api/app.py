@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import mysql.connector
 import os
 import socket
+import datetime
 from pydantic import BaseModel
 from typing import Dict, Any
 
@@ -98,7 +99,11 @@ async def get_user():
 async def get_container_id(response: Response):
     """Get container ID (hostname)"""
     response.headers["Connection"] = "close"
-    return {"container_id": socket.gethostname()}
+    # Prevent browser/proxy caching so each refresh actually hits the backend
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return {"container_id": socket.gethostname(), "timestamp": datetime.datetime.utcnow().isoformat() + "Z"}
 
 @app.put("/user/{name}")
 async def update_user(name: str):
