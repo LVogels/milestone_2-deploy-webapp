@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ms2-frontend-cert
+  namespace: default
+spec:
+  secretName: ms2-frontend-tls
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days before expiration
+  issuerRef:
+    name: ms2-ca-issuer
+    kind: Issuer
+  commonName: localhost
+  dnsNames:
+    - localhost
