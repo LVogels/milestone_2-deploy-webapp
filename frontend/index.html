@@ -1,47 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Milestone 2</title>
-  </head>
-  <body>
-    <div class="container">
-      <h1><span id="user">Loading...</span> has reached milestone 2!</h1>
-      <div class="info-box">
-        <strong>Container ID:</strong> <span id="container_id">Loading...</span>
-      </div>
-      <div class="info-box">
-        <strong>Last Updated:</strong> <span id="timestamp">-</span>
-      </div>
-    </div>
 
-    <script>
-      const API_BASE = 'http://localhost/api';
-      
-      // Function to fetch and update data
-      async function updateData() {
-        try {
-          // Fetch user data
-          const userResponse = await fetch(`${API_BASE}/user`);
-          const userData = await userResponse.json();
-          document.getElementById('user').innerText = userData.name;
-          
-          // Fetch container ID
-          const containerResponse = await fetch(`${API_BASE}/container_id?_=${Date.now()}`);
-          const containerData = await containerResponse.json();
-          document.getElementById('container_id').innerText = containerData.container_id;
-          
-          // Update timestamp
-          document.getElementById('timestamp').innerText = new Date().toLocaleString();
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      }
-      
-      // Initial load
-      updateData();
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milestone 2</title>
+</head>
+
+<body>
+  <h1><span id="user">Loading...</span> has reached milestone 2!</h1>
+  <p>Container ID: <span id="container_id">Loading...</span></p>
+
+  <script>
+    // Fetch user from API
+    fetch("http://localhost/api/user")
+      .then((res) => res.json())
+      .then((data) => {
+        // Get user name
+        const user = data.name;
+        // Display user name
+        document.getElementById("user").innerText = user;
+      })
+      .catch((error) => console.error("Error fetching user:", error));
+
+    // Fetch container ID from API
+    fetch("http://localhost/api/container_id")
+      .then((res) => res.json())
+      .then((data) => {
+        // Get container ID
+        const containerId = data.container_id;
+        // Display container ID
+        document.getElementById("container_id").innerText = containerId;
+      })
+      .catch((error) => console.error("Error fetching container ID:", error));
+  </script>
+</body>
+
 </html>

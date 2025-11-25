@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: api
-        image: lv-ms2-api:latest
-        imagePullPolicy: IfNotPresent
+        image: lenv1891/lv-ms2-api:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env:
