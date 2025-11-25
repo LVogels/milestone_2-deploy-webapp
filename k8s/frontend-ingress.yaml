@@ -6,6 +6,15 @@ spec:
   rules:
   - http:
       paths:
+      # API routes must come first (more specific path)
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: lv-ms2-api-service
+            port:
+              number: 8000
+      # Frontend routes come last (catch-all)
       - path: /
         pathType: Prefix
         backend:
