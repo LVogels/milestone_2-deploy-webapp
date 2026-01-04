@@ -6,8 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-    - host: lvms2.com
-      http:
+    - http:
         paths:
           # API routes must come first (more specific path)
           - path: /api(/|$)(.*)

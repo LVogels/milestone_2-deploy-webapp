@@ -9,7 +9,6 @@ Before you start, make sure you have the following tools installed:
 -   [Docker](https://docs.docker.com/get-docker/)
 -   [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 -   [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
--   [ArgoCD CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 -   [Helm](https://helm.sh/docs/intro/install/)
 
 ## Step 1: Create a Local Kubernetes Cluster
@@ -38,17 +37,7 @@ First, you need a Kubernetes cluster running locally. We will use `kind` to crea
     kubectl patch deployment -n ingress-nginx ingress-nginx-controller -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"}}}}}'
     ```
 
-4.  **Load Docker Images:**
-    Build the Docker images for the application and load them into your `kind` cluster. ArgoCD will use these images when it deploys the Kubernetes manifests.
 
-    ```bash
-    docker build -t lv-ms2-api:latest ./api
-    docker build -t lv-ms2-frontend:latest ./frontend
-    kind load docker-image lv-ms2-api:latest --name ms2
-    kind load docker-image lv-ms2-frontend:latest --name ms2
-    docker pull mysql:5.7
-    kind load docker-image mysql:5.7 --name ms2
-    ```
 
 ## Step 2: Install ArgoCD
 
