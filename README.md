@@ -1175,8 +1175,9 @@ Now, ArgoCD monitors the repository. If you push a change to the `k8s` folder, A
 
 ### 6.1 Accessing the Application
 
-> **[INSERT SCREENSHOT HERE]**
-
+![alt text](image-6.png)
+![alt text](image-7.png)
+As seen above, the containers round-robin to balance the load between them
 
 ### 6.2 
 
