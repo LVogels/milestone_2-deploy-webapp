@@ -521,12 +521,11 @@ docker-compose up --build
 *   **`up`**: Create and start containers.
 *   **`--build`**: Force a rebuild of images (useful if you changed code).
 
-> **[INSERT SCREENSHOT HERE]**
-> *Description: A screenshot of your terminal showing the output of `docker-compose up`. It should show logs from `lv-ms2-frontend`, `lv-ms2-api`, and `lv-ms2-db` indicating they have started successfully (e.g., "Uvicorn running on...", "mysqld: ready for connections").*
+![alt text](image.png)
 
 You can now visit `http://localhost:8080` to see the application running.
 
----
+
 
 ## 4. Step 2: Kubernetes Deployment (KIND)
 
@@ -579,8 +578,7 @@ kind create cluster --config kind-config.yaml
 ```
 *   **`--config`**: Tells KIND to use our custom configuration file.
 
-> **[INSERT SCREENSHOT HERE]**
-> *Description: A screenshot of your terminal showing the output of `kind create cluster`. It should show "Creating cluster 'ms2'..." and "Cluster creation complete".*
+![alt text](image-1.png)
 
 ### 4.2 Setting up Ingress
 
@@ -601,10 +599,9 @@ kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.
 **Patch the Controller:**
 We need to ensure the Ingress controller runs on the specific node we prepared in `kind-config.yaml`.
 ```bash
-kubectl patch deployment -n ingress-nginx ingress-nginx-controller -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"}}}}}'
-```
+kubectl patch deployment -n ingress-nginx ingress-nginx-controller -p '{\"spec\":{\"template\":{\"spec\":{\"nodeSelector\":{\"ingress-ready\":\"true\"}}}}}'```
+![alt text](image-2.png)
 
-d
 
 ### 4.3 Kubernetes Manifests
 
@@ -1043,10 +1040,8 @@ metadata:
 spec:
   # A list of host rules
   rules:
-  # The domain name this rule applies to. You must map this in your DNS (or /etc/hosts)
-  - host: lvms2.com
     # Protocol definition (HTTP)
-    http:
+    - http:
       # List of paths to route
       paths:
       # API routes must come first (more specific path)
@@ -1098,9 +1093,7 @@ kubectl apply -f k8s/frontend-deployment.yaml
 kubectl apply -f k8s/frontend-ingress.yaml
 ```
 
-> **[INSERT SCREENSHOT HERE]**
-> *Description: A screenshot of your terminal showing the output of `kubectl get pods`. It should show all pods (api, db, frontend) with status "Running".*
-
+![alt text](image-3.png)
 ---
 
 ## 5. Step 3: GitOps Deployment with ArgoCD
@@ -1174,9 +1167,8 @@ kubectl apply -f argocd-app.yaml
 ```
 
 Now, ArgoCD monitors the repository. If you push a change to the `k8s` folder, ArgoCD will automatically update the cluster.
-
-> **[INSERT SCREENSHOT HERE]**
-
+![alt text](image-4.png)
+![alt text](image-5.png)
 ---
 
 ## 6. Verification & Conclusion
@@ -1186,7 +1178,7 @@ Now, ArgoCD monitors the repository. If you push a change to the `k8s` folder, A
 > **[INSERT SCREENSHOT HERE]**
 
 
-### 6.2 In-Depth Conclusion
+### 6.2 
 
 This project has successfully demonstrated the end-to-end process of building, containerizing, and deploying a modern three-tier web application. We have navigated the path from local development to a production-grade orchestration environment, highlighting several key technologies and concepts:
 
